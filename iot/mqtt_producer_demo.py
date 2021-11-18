@@ -7,8 +7,8 @@ import paho.mqtt.client as mqtt
 connected = False
 project_id = "halogen-byte-329812"
 cloud_region = "us-central1"
-registry_id = "my-python-registry"
-device_id = "my-python-device"
+registry_id = "temperature-registry"
+device_id = "temperature-sensor-device"
 private_key_file = "rsa_private.pem"
 algorithm = "RS256"
 ca_certs = "roots.pem"
