@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import ssl
 import time
@@ -6,10 +7,6 @@ import paho.mqtt.client as mqtt
 
 connected = False
 messagerecieved = False;
-project_id = "halogen-byte-329812"
-cloud_region = "us-central1"
-registry_id = "temperature-registry"
-device_id = "temperature-fan-device"
 private_key_file = "rsa_private.pem"
 algorithm = "RS256"
 ca_certs = "roots.pem"
@@ -57,6 +54,18 @@ def create_jwt(project_id, private_key_file, algorithm):
     )
 
     return jwt.encode(token, private_key, algorithm=algorithm)
+
+parser = argparse.ArgumentParser(description=("Arg Parse"))
+parser.add_argument("--project_id", required=True)
+parser.add_argument("--cloud_region", required=True)
+parser.add_argument("--registry_id", required=True)
+parser.add_argument("--device_id", required=True)
+args = parser.parse_args()
+
+project_id = args.project_id
+cloud_region = args.cloud_region
+registry_id = args.registry_id
+device_id = args.device_id
 
 client_id = "projects/{}/locations/{}/registries/{}/devices/{}".format(
         project_id, cloud_region, registry_id, device_id
