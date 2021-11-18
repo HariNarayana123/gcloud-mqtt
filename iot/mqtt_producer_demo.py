@@ -52,6 +52,10 @@ def create_jwt(project_id, private_key_file, algorithm):
 
     return jwt.encode(token, private_key, algorithm=algorithm)
 
+parser = argparse.ArgumentParser(description=("Arg Parse"))
+parser.add_argument("--temperature", required=True)
+args = parser.parse_args()
+
 client_id = "projects/{}/locations/{}/registries/{}/devices/{}".format(
         project_id, cloud_region, registry_id, device_id
     )
@@ -59,7 +63,7 @@ topic = "/devices/{}/{}".format(device_id, "events")
 #topic = "projects/halogen-byte-329812/topics/my-python-topic"
 #payload = "Awesome Run servo"
 
-payload = 80
+payload = args.temperature
 
 print("Client Id : {}\nTopic : {}\npayload : {}".format(client_id, topic, payload))
 
