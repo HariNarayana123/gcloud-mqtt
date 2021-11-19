@@ -4,6 +4,7 @@ import ssl
 import time
 import jwt
 import paho.mqtt.client as mqtt
+import RPi.GPIO as GPIO
 
 connected = False
 messagerecieved = False;
@@ -31,6 +32,7 @@ def on_message(unused_client, unused_userdata, message):
             payload, message.topic, str(message.qos)
         )
     )
+    rotate_servo()
 
 def create_jwt(project_id, private_key_file, algorithm):
 
@@ -54,6 +56,35 @@ def create_jwt(project_id, private_key_file, algorithm):
     )
 
     return jwt.encode(token, private_key, algorithm=algorithm)
+
+def rotate_servo():
+    # Set GPIO numbering mode
+    GPIO.setmode(GPIO.BOARD)
+
+    # Set pin 11 as an output, and set servo as pin 11 as PWM
+    GPIO.setup(11, GPIO.OUT)
+    servo = GPIO.PWM(11, 50)  # 11 is pin, 50 = 50Hz pulse
+
+    # start PWM running, but with value of 0 (pulse off)
+    servo.start(0)
+    print("Waiting for 1 seconds")
+    time.sleep(1)
+
+    # Duty values from 2 to 12 (0 to 180 degrees)
+    # Turn to 180 degrees
+    servo.ChangeDutyCycle(12)
+    print("180%")
+    time.sleep(1)
+
+    # Turn back to 0 degrees
+    servo.ChangeDutyCycle(2)
+    print("0%")
+    time.sleep(1)
+    servo.ChangeDutyCycle(0)
+
+    # Clean things up at the end
+    servo.stop()
+    GPIO.cleanup()
 
 parser = argparse.ArgumentParser(description=("Arg Parse"))
 parser.add_argument("--project_id", required=True)
