@@ -4,6 +4,9 @@ import ssl
 import time
 import jwt
 import paho.mqtt.client as mqtt
+import smbus2
+import spidev
+import json
 
 connected = False
 private_key_file = "rsa_private.pem"
@@ -49,6 +52,17 @@ def create_jwt(project_id, private_key_file, algorithm):
 
     return jwt.encode(token, private_key, algorithm=algorithm)
 
+def get_data()
+  
+    
+    
+    
+    data ={
+        "soil_moisture" :
+        "rainfall":  
+    }
+    return json.dumps(data)
+    
 parser = argparse.ArgumentParser(description=("Arg Parse"))
 parser.add_argument("--project_id", required=True)
 parser.add_argument("--cloud_region", required=True)
