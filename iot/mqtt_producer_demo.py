@@ -66,7 +66,7 @@ payload = args.temperature
 client_id = "projects/{}/locations/{}/registries/{}/devices/{}".format(
         project_id, cloud_region, registry_id, device_id
     )
-topic = "/devices/{}/{}".format(device_id, "events")
+
 
 print("Client Id : {}\nTopic : {}\npayload : {}".format(client_id, topic, payload))
 
@@ -75,6 +75,7 @@ client.username_pw_set(
         username="unused", password=create_jwt(project_id, private_key_file, algorithm)
     )
 client.tls_set(ca_certs=ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
+
 client.on_connect = on_connect
 client.on_publish = on_publish
 
@@ -86,5 +87,6 @@ print("loop start")
 while connected != True:
     time.sleep(0.3)
 
+topic = "/devices/{}/{}".format(device_id, "events")
 client.publish(topic, payload)
 client.loop_stop()
