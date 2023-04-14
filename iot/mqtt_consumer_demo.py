@@ -77,7 +77,6 @@ client_id = "projects/{}/locations/{}/registries/{}/devices/{}".format(
         project_id, cloud_region, registry_id, device_id
     )
 
-topic = "/devices/{}/{}".format(device_id, "events")
 #topic = "projects/halogen-byte-329812/topics/my-python-topic"
 #mqtt_command_topic = "/devices/{}/commands/#".format(device_id)
 #mqtt_config_topic = "/devices/{}/config".format(device_id)
@@ -85,18 +84,23 @@ topic = "/devices/{}/{}".format(device_id, "events")
 print("Client Id : {}\nTopic : {}\n".format(client_id, topic))
 
 client = mqtt.Client(client_id=client_id)
-client.on_message = on_message
+
 client.username_pw_set(
         username="unused", password=create_jwt(project_id, private_key_file, algorithm)
     )
 client.tls_set(ca_certs=ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
 
+client.on_message = on_message
 client.on_connect = on_connect
 
 
 client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
 client.loop_start()
 print("loop start")
+
+
+topic = "/devices/{}/{}".format(device_id, "events")
+client.subscribe(topic)
 
 while connected != True:
     time.sleep(0.3)
