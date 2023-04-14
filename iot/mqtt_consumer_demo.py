@@ -4,9 +4,7 @@ import ssl
 import time
 import jwt
 import paho.mqtt.client as mqtt
-import RPi.GPIO as GPIO
-from google.cloud import iot_v1
-import base64
+import json
 
 connected = False
 messagerecieved = False;
@@ -41,12 +39,11 @@ def on_connect(unused_client, unused_userdata, unused_flags, rc):
 
 def on_message(unused_client, unused_userdata, message):
     """Callback when the device receives a message on a subscription."""
-    payload = str(message.payload.decode("utf-8"))
-    print(
-        "Received message '{}' on topic '{}' with Qos {}".format(
-            payload, message.topic, str(message.qos)
-        )
-    )
+    payload = message.payload.decode("utf-8")
+    
+    data  =json.loads(payloads)
+    print(data["soil_moisture"])
+    print(data["rainfall"])
  
 
 def create_jwt(project_id, private_key_file, algorithm):
