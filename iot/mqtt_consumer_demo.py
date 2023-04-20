@@ -96,7 +96,7 @@ client.loop_start()
 print("loop start")
 
 
-topic = "/devices/{}/{}".format("device-2", "events")
+topic = "/devices/{}/{}".format(device_id, "events")
 client.subscribe(topic)
 
 while connected != True:
